@@ -443,7 +443,7 @@ html
       socket.emit('subscribe', room);
     });
     socket.on(eventToListenTo, function(data) {
-      console.log("New transaction received: " + data.txid)
+      console.log("New transaction received: " + data.txid);
     });
   </script>
 </body>

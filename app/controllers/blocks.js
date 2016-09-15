@@ -139,7 +139,7 @@ exports.list = function(req, res) {
               height: info.height,
               size: info.size,
               hash: b.hash,
-              time: b.ts || info.time,
+              time: info.time,
               txlength: info.tx.length,
 	      voters: info.voters,
 	      freshstake: info.freshstake

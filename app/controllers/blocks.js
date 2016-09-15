@@ -104,8 +104,13 @@ exports.list = function(req, res) {
   } else {
     dateStr = todayStr;
     isToday = true;
-  }
-  var gte = Math.round((new Date(dateStr)).getTime() / 1000);
+  }  
+  function convertDateToUTC(date) { 
+          return new Date(date.getUTCFullYear(), date.getUTCMonth(), 
+			  date.getUTCDate(), date.getUTCHours(), 
+			  date.getUTCMinutes(), date.getUTCSeconds()); 
+  }	  
+  var gte = Math.round((convertDateToUTC(new Date(dateStr))).getTime() / 1000);
 
   //pagination
   var lte = parseInt(req.query.startTimestamp) || gte + 86400;
@@ -134,12 +139,12 @@ exports.list = function(req, res) {
               console.log(err);
               return cb(err);
             }
-            if (b.ts < moreTs) moreTs = b.ts;
+            if (info.time < moreTs) moreTs = info.time;
             return cb(err, {
               height: info.height,
               size: info.size,
-              hash: b.hash,
-              time: b.ts || info.time,
+              hash: info.hash,
+              time: info.time,
               txlength: info.tx.length,
 	      voters: info.voters,
 	      freshstake: info.freshstake

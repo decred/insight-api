@@ -16,6 +16,7 @@ exports.block = function(req, res, next, hash) {
     if (err || !block)
       return common.handleErrors(err, res, next);
     else {
+      block.info.time = new Date(block.info.time * 1000).toUTCString(),
       tdb.getPoolInfo(block.info.tx[0], function(info) {
         block.info.poolInfo = info;
         req.block = block.info;
@@ -105,12 +106,8 @@ exports.list = function(req, res) {
     dateStr = todayStr;
     isToday = true;
   }  
-  function convertDateToUTC(date) { 
-          return new Date(date.getUTCFullYear(), date.getUTCMonth(), 
-			  date.getUTCDate(), date.getUTCHours(), 
-			  date.getUTCMinutes(), date.getUTCSeconds()); 
-  }	  
-  var gte = Math.round((convertDateToUTC(new Date(dateStr))).getTime() / 1000);
+   
+  var gte = Math.round(new Date(dateStr).getTime() / 1000);
 
   //pagination
   var lte = parseInt(req.query.startTimestamp) || gte + 86400;
@@ -144,7 +141,7 @@ exports.list = function(req, res) {
               height: info.height,
               size: info.size,
               hash: info.hash,
-              time: info.time,
+              time: new Date(info.time * 1000).toUTCString(),
               txlength: info.tx.length,
 	      voters: info.voters,
 	      freshstake: info.freshstake

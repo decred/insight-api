@@ -100,7 +100,7 @@ var getTransaction = function(txid, cb) {
 
     if (!tx || !tx.info) {
       console.log('[transactions.js.48]:: TXid %s not found in RPC. CHECK THIS.', txid);
-      return ({ txid: txid });
+      return cb(null, null);
     }
 
     return cb(null, tx.info);
@@ -157,10 +157,15 @@ exports.list = function(req, res, next) {
           console.log(err);
           res.status(404).send('TX not found');
         }
-
+	var nonNullTxs = [];
+	for (var i = 0; i < results.length; i++) {
+	  if (results[i] != null) {
+	    nonNullTxs.push(results[i]);
+	  }
+	}
         res.jsonp({
           pagesTotal: pagesTotal,
-          txs: results
+          txs: nonNullTxs 
         });
       });
     });
@@ -191,10 +196,15 @@ exports.list = function(req, res, next) {
           console.log(err);
           res.status(404).send('TX not found');
         }
-
+	var nonNullTxs = [];
+	for (var i = 0; i < results.length; i++) {
+	  if (results[i] != null) {
+	    nonNullTxs.push(results[i]);
+	  }
+	}
         res.jsonp({
           pagesTotal: pagesTotal,
-          txs: results
+          txs: nonNullTxs 
         });
       });
     });
